@@ -1,5 +1,5 @@
 #
-# docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 redecommerce
+# docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 netecommerce
 #
 version: '3'
 
@@ -18,9 +18,17 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+    networks:
+      net-ecommerce:
+        ipv4_address: 172.18.0.10
 
 volumes:
   wordpress_data: {}
+
+networks:
+  net-ecommerce:
+    external:
+      name: netecommerce
 
 #
 # Creating mysql connector

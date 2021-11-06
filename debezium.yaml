@@ -1,5 +1,5 @@
 #
-# docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 redecommerce
+# docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 netecommerce
 #
 version: '3'
 
@@ -8,37 +8,50 @@ services:
     image: debezium/zookeeper:1.6
     hostname: zookeeper
     container_name: zoo
+    restart: always
     ports:
       - '2181:2181'
       - '2888:2888'
       - '3888:3888'
+    networks:
+      net-ecommerce:
+        ipv4_address: 172.18.0.2
 
   kafka:
     image: debezium/kafka:1.6
     container_name: kafka
     hostname: kafka
+    restart: always
     environment: 
       ZOOKEEPER_CONNECT: zookeeper
     ports:
       - '9092:9092'
     depends_on:
       - zookeeper
+    networks:
+      net-ecommerce:
+        ipv4_address: 172.18.0.4
 
   mysql:
     image: debezium/example-mysql:1.6
     container_name: mysql
     hostname: mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: debezium
       MYSQL_USER: mysqluser
       MYSQL_PASSWORD: mysqlpw
     ports:
       - '3306:3306'
+    networks:
+      net-ecommerce:
+        ipv4_address: 172.18.0.6
 
   kafka_connect:
     image: debezium/connect:1.6
     container_name: connect
     hostname: connect
+    restart: always
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: 1
@@ -51,7 +64,14 @@ services:
       - zookeeper
       - kafka
       - mysql
+    networks:
+      net-ecommerce:
+        ipv4_address: 172.18.0.8
 
+networks:
+  net-ecommerce:
+    external:
+      name: netecommerce
 #
 # Creating mysql connector
 #

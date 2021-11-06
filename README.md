@@ -80,6 +80,9 @@ services:
 ## 2 creamos la BBDD que necesita wordpress
 
 ```
+docker container exec -u root -it mysql bash
+mysql -uroot -pdebezium
+
 CREATE USER 'wordpress'@'%' IDENTIFIED BY 'wordpress';
 GRANT ALL PRIVILEGES ON *.* TO wordpress@'%' IDENTIFIED BY 'wordpress';
 
@@ -142,6 +145,6 @@ docker container exec -u root -it kafka bash
 ./kafka-topics.sh --list --zookeeper zookeeper:2181
 
 
-./kafka-console-consumer.sh --bootstrap-server 7cff3dd8f1cf:9092 --topic codbserver1.wordpress.wp_users --from-beginning
+./kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic dbserver1.wordpress.wp_users --from-beginning
 
 ```
