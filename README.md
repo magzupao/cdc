@@ -149,7 +149,7 @@ docker container exec -u root -it kafka bash
 
 ## 7 Otra forma  
   
-Ejecutamos los ficheros yaml usando la red por default debezium-sin-red.yaml:
+Ejecutamos el fichero yaml usando la red por default debezium-sin-red.yaml:
 ```
 docker-compose -f debezium-sin-red.yaml up
 ```
