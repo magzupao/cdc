@@ -155,6 +155,8 @@ docker-compose -f debezium-sin-red.yaml up
 ```
 Ejecutamos el punto 2.  
   
+Invocamos el localhost:8000 para instalar wordpress
+  
 Ejecutamos en el contenedor 'connect', tener en cuenta de ejecutar el comando en una sola linea, reemplazamos las IPs de:  
 localhost:8083 = 172.20.0.6:8083  
 mysql:3306 = 172.20.0.4:3306  
