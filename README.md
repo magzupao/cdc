@@ -182,6 +182,7 @@ Server: Jetty(9.4.38.v20210224)
   
 Ingresamos al contenedor 'kafka' y vemos los topics creados:
 ```
+cd bin
 ./kafka-topics.sh --list --zookeeper zookeeper:2181
 ```
 
