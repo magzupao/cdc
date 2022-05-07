@@ -1,0 +1,86 @@
+#
+# docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 netecommerce
+#
+version: '3'
+
+services:
+  zookeeper:
+    image: debezium/zookeeper:1.6
+    hostname: zookeeper
+    container_name: zoo
+    restart: always
+    ports:
+      - '2181:2181'
+      - '2888:2888'
+      - '3888:3888'
+#    networks:
+#      net-ecommerce:
+#        ipv4_address: 172.18.0.2
+
+  kafka:
+    image: debezium/kafka:1.6
+    container_name: kafka
+    hostname: kafka
+    restart: always
+    environment: 
+      ZOOKEEPER_CONNECT: zookeeper
+    ports:
+      - '9092:9092'
+    depends_on:
+      - zookeeper
+#    networks:
+#      net-ecommerce:
+#        ipv4_address: 172.18.0.4
+
+  mysql:
+    image: debezium/example-mysql:1.6
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: debezium
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqlpw
+    ports:
+      - '3306:3306'
+#    networks:
+#      net-ecommerce:
+#        ipv4_address: 172.18.0.6
+
+  kafka_connect:
+    image: debezium/connect:1.6
+    container_name: connect
+    hostname: connect
+    restart: always
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: my_connect_configs
+      OFFSET_STORAGE_TOPIC: my_connect_offsets
+      STATUS_STORAGE_TOPIC: my_connect_statuses
+    ports:
+      - '8083:8083'
+    depends_on:
+      - zookeeper
+      - kafka
+      - mysql
+#    networks:
+#      net-ecommerce:
+#        ipv4_address: 172.18.0.8
+
+#networks:
+#  net-ecommerce:
+#    external:
+#      name: netecommerce
+#
+# Creating mysql connector
+#
+
+# curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d '{ "name": "inventory-connector", "config": { "connector.class": "io.debezium.connector.mysql.MySqlConnector", "tasks.max": "1", "database.hostname": "mysql", "database.port": "3306", "database.user": "debezium", "database.password": "dbz", "database.server.id": "184054", "database.server.name": "dbserver1", "database.include.list": "inventory", "database.history.kafka.bootstrap.servers": "kafka:9092", "database.history.kafka.topic": "dbhistory.inventory" } }'
+
+# Getting connectors
+# curl -H "Accept:application/json" localhost:8083/connectors/
+
+# Getting inventory-connector
+# curl -i -X GET -H "Accept:application/json" localhost:8083/connectors/inventory-connector
+
