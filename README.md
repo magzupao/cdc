@@ -153,12 +153,13 @@ Ejecutamos los ficheros yaml usando la red por default debezium-sin-red.yaml:
 ```
 docker-compose -f debezium-sin-red.yaml up
 ```
-
+Ejecutamos el punto 2.  
+  
 Ejecutamos en el contenedor 'connect', tener en cuenta de ejecutar el comando en una sola linea, reemplazamos las IPs de:  
-localhost:8083 = 172.20.0.6:8083
-mysql:3306 = 172.20.0.4:3306
-kafka:9092 = 172.20.0.5:9092
-
+localhost:8083 = 172.20.0.6:8083  
+mysql:3306 = 172.20.0.4:3306  
+kafka:9092 = 172.20.0.5:9092  
+  
 ```
 curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 172.20.0.6:8083/connectors/ -d '{ "name": "inventory-connector", "config": { "connector.class": "io.debezium.connector.mysql.MySqlConnector", "tasks.max": "1", "database.hostname": "172.20.0.4", "database.port": "3306", "database.user": "root", "database.password": "debezium", "database.server.name": "dbserver1", "database.include.list": "inventory", "database.history.kafka.bootstrap.servers": "172.20.0.5:9092", "database.history.kafka.topic": "dbhistory.inventory" } }'
 
