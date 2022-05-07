@@ -143,6 +143,8 @@ Creamos un topic que detecte cualquier cambio en la tabla wp_users
 docker container exec -u root -it kafka bash
 
 ./kafka-topics.sh --list --zookeeper zookeeper:2181
+
+./kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic dbserver1.wordpress.wp_users --from-beginning
 ```
 
 ## 7 Otra forma  
@@ -152,6 +154,6 @@ docker container exec -u root -it kafka bash
 
 
 
-./kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic dbserver1.wordpress.wp_users --from-beginning
+
 
 ```
